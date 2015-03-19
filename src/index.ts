@@ -5,6 +5,38 @@ var ping = require("node-http-ping");
 var args = minimist(process.argv.slice(2));
 if (args['help'] || args['h']) printHelp();
 
+var isWatcherEnabled: boolean = false;
+
+//TODO Convert to class to create multiple watcher instances
+
+export function start(options: WatchOptions, callback: (time) => any) {
+    var options: WatchOptions = {
+        url: options.url,
+        port: options.port || 80,
+        interval: options.interval || 10,
+        timeout: options.timeout || 2
+    }
+    if (!options.url) throw "InvalidInputException: Url not supplied";
+    if (!isValidParameters(options)) throw "InvalidInputExpception: Invalid parameter supplied";
+    if (!callback) throw "InvalidInputException: Callback not supplied";
+
+    // Initiate the watcher
+    pingTick(true, options, callback);
+    isWatcherEnabled = true;
+    setTimeout(() => { pingTick(true, options, callback) }, options.interval*1000);
+}
+
+export function stop() {
+    isWatcherEnabled = false;
+}
+
+export interface WatchOptions {
+    url: string;
+    port?: number;
+    interval?: number;
+    timeout?: number;
+}
+
 function printHelp() {
     var c = console.log;
     c("Webserver watcher");
@@ -19,43 +51,70 @@ function printHelp() {
     process.exit();
 }
 
-// Must provide a destination url
-if (!args['_']) {
-    console.log("No destination url supplied");
-    printHelp();
+if (args['_']) {
+    var options = {
+        interval: args['i'] || args['interval'] || 10,
+        port: args['p'] || args['port'] || 80,
+        timeout: args['t'] || args['timeout'] || 2,
+        url: args['_'][0]
+    }
+    
+    if (!isValidParameters(options)) {
+        console.log("watcher: Invalid parameters supplied.");
+        printHelp();
+    }
+
+    console.log("Press CTRL+C to exit");
+
+    setInterval(() => { pingTick(false, options); }, options.interval*1000);
 }
 
-var interval = args['i'] || args['interval'] || 10;
-var port = args['p'] || args['port'] || 80;
-var timeout = args['t'] || args['timeout'] || 2;
-var url = args['_'][0];
-
-// Port number must be a number and valid (1-65535)
-if (isNaN(port) || port <= 0 || port > 65535) {
-    console.log("Invalid port number supplied. Must be in range 1 - 65535.");
-    printHelp();
-}
-
-// Interval must be a number and above 0.
-if (isNaN(interval) || interval <= 0) {
-    console.log("Ping interval is invalid. Must be above zero (0).");
-    printHelp();
-}
-
-// Timeout must be a number and above 0.
-if (isNaN(timeout) || timeout <= 0) {
-    console.log("Ping timeout is invalid. Must be above zero (0).");
-    printHelp();
-}
-
-console.log("Press CTRL+C to exit");
-setInterval(pingTick, interval*1000);
-
-pingTick();
-function pingTick() {
+function pingTick(isModule: boolean, options?: WatchOptions, callback?: (arg) => any) {
     var timestamp = new Date().toTimeString().slice(0,8);
-    ping(url, port).timeout(timeout*1000)
-        .then(time => {
-            console.log("[%s] [%s:%d] %dms", timestamp, url, port, time);
-        }).catch(() => console.log("[%s:%d] Timed out after %dseconds", url, port, timeout));
+    var pingPromise = ping(options.url, options.port);
+
+    if (isModule) {
+        pingPromise.tim
+            pingPromise.then(time => {
+                callback(time);
+            }).catch(callback(-1));
+        if (isWatcherEnabled) setTimeout(() => { pingTick(true, options, callback) }, options.interval*1000);
+        return;
+    }
+    pingPromise.then(time => {
+        console.log("[%s] [%s:%d] %dms", timestamp, options.url, options.port, time);
+    }).catch(() => console.log("[%s:%d] Timed out after %dseconds", options.url, options.port, options.timeout));
 }
+
+function isValidPort(value: number) {
+    return (!isNaN(value) && value > 0 || value <= 65535);
+}
+
+function isValidTimeout(value: number) {
+    return (!isNaN(value) && value > 0);
+}
+
+function isValidInterval(value: number) {
+    return (!isNaN(value) && value > 0);
+}
+
+function isValidParameters(options: WatchOptions) {
+    // Port number must be a number and valid (1-65535)
+    if (!isValidPort(options.port)) {
+        console.log("Invalid port number supplied. Must be in range 1 - 65535.");
+        return false;
+    }
+
+    // Interval must be a number and above 0.
+    if (!isValidInterval(options.interval)) {
+        console.log("Ping interval is invalid. Must be above zero (0).");
+        return false; 
+    }
+
+    // Timeout must be a number and above 0.
+    if (!isValidTimeout(options.timeout)) {
+        console.log("Ping timeout is invalid. Must be above zero (0).");
+        return false; 
+    }
+}
+

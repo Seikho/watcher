@@ -1,28 +1,27 @@
 function task(grunt) {
-    grunt.initConfig({
-        gitlog: {
-            todo: {
-                options: {
-                    verbose: false,
-                    prop: 'gitlog.todo.result',
-                    callback: function (results) {
-                        console.log(results);
-                    }
-                }
-            }
-        },
-        gitcheckout: {
-            undo: {
-                options: {
-                    branch: '.',
-                    verbose: true
-                }
-            }
-        },
-        gitpull: {}
+grunt.initConfig({
+       ts:{ 
+           default:{
+               src: ["**/*.ts", "!node_modules/**/*.ts"],
+               verbose: false,
+               options: {
+                   module: "commonjs",
+                   target: "es5"
+               }
+           },
+           watch:{
+               src: ["**/*.ts", "!node_modules/**/*.ts"],
+               verbose: false,
+               options: {
+                   module: "commonjs",
+                   target: "es5"
+               },
+               watch: "src/**/*.ts"
+           }
+       }
     });
-    grunt.loadNpmTasks('grunt-git');
-    grunt.registerTask('default', ['gitlog:todo']);
-    grunt.registerTask('revert', ['gitcheckout:undo']);
+    grunt.loadNpmTasks("grunt-ts");
+    grunt.registerTask("default", ["ts:default"]);
+    grunt.registerTask("watch", ["ts:watch"]);
 }
 module.exports = task;

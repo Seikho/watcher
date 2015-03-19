@@ -4,3 +4,4 @@ tsd.json
 *.swp
 node_modules/
 NUL
+.tscache/
