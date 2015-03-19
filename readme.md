@@ -6,17 +6,33 @@
 * npm
 
 ## installation
-    git clone https://github.com/seikho/watcher
+    // node module
+	npm install webwatcher
+
+	// standalone tool
+	git clone https://github.com/seikho/watcher
 	cd watcher
 	npm install
 
 ## usage
-    $ node src/index [url] [-p portNumber] [-t timeoutSeconds] [-i intervalSeconds]
+**use it as a node module**
 
-url: destination url. E.g. www.google.com  
--p, --port: port number. default: 80  
--i, --interval: interval in seconds. default: 10  
--t, --timeout: timeout in seconds. default 2
+    npm install webwatcher
+    var watcher = require("webwatcher");
+    var options = { url: 'google.com' };
+    var callback = function(time) { console.log("Response time: %d", time); }
+    watcher.start(options, callback);
+
+**or use is as a cli tool**
+	
+    cd watcher
+    node src/index www.google.com -t 2 -i 5
+    
+    // node src/index [url] [-p portNumber] [-t timeoutSeconds] [-i intervalSeconds]
+    // url: destination url. E.g. www.google.com  
+    // -p, --port: port number. default: 80  
+    // -i, --interval: interval in seconds. default: 10  
+    // -t, --timeout: timeout in seconds. default 2
 
 ## license
 

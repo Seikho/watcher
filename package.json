@@ -1,5 +1,5 @@
 {
-  "name": "watcher",
+  "name": "webwatcher",
   "version": "0.1.0",
   "description": "A simple webserver watcher",
   "main": "src/index.js",
