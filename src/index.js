@@ -43,9 +43,11 @@ if (isNaN(timeout) || timeout <= 0) {
 }
 console.log("Press CTRL+C to exit");
 setInterval(pingTick, interval * 1000);
+pingTick();
 function pingTick() {
+    var timestamp = new Date().toTimeString().slice(0, 8);
     ping(url, port).timeout(timeout * 1000).then(function (time) {
-        console.log("[%s:%d] %dms", url, port, time);
+        console.log("[%s] [%s:%d] %dms", timestamp, url, port, time);
     }).catch(function () { return console.log("[%s:%d] Timed out after %dseconds", url, port, timeout); });
 }
 //# sourceMappingURL=index.js.map
