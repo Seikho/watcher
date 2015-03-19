@@ -1,5 +1,5 @@
 ## watcher
-####### a simple web server watcher
+###### a simple web server watcher
 
 ## requirements
 * node.js
