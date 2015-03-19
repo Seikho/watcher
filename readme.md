@@ -22,6 +22,10 @@
     var options = { url: 'google.com' };
     var callback = function(time) { console.log("Response time: %d", time); }
     watcher.start(options, callback);
+	...
+	watcher.stop();
+
+   
 
 **or use is as a cli tool**
 	

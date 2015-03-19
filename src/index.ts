@@ -51,7 +51,7 @@ function printHelp() {
     process.exit();
 }
 
-if (args['_']) {
+if (args['_'] && args['_'].length > 0) {
     var options = {
         interval: args['i'] || args['interval'] || 10,
         port: args['p'] || args['port'] || 80,
@@ -70,13 +70,16 @@ if (args['_']) {
 }
 
 function pingTick(isModule: boolean, options?: WatchOptions, callback?: (arg) => any) {
+    console.log(options);
     var timestamp = new Date().toTimeString().slice(0,8);
     var pingPromise = ping(options.url, options.port).timeout(options.timeout*1000);
 
     if (isModule) {
         pingPromise.then(time => {
             callback(time);
-        }).catch(callback(-1));
+        }).catch(() => {
+            callback(-1);
+        })
         if (isWatcherEnabled) setTimeout(() => { pingTick(true, options, callback) }, options.interval*1000);
         return;
     }

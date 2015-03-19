@@ -1,11 +1,9 @@
-/// <reference path="typings/tsd.d.ts" />
 var minimist = require("minimist");
 var ping = require("node-http-ping");
 var args = minimist(process.argv.slice(2));
 if (args['help'] || args['h'])
     printHelp();
 var isWatcherEnabled = false;
-//TODO Convert to class to create multiple watcher instances
 function start(options, callback) {
     var options = {
         url: options.url,
@@ -19,7 +17,6 @@ function start(options, callback) {
         throw "InvalidInputExpception: Invalid parameter supplied";
     if (!callback)
         throw "InvalidInputException: Callback not supplied";
-    // Initiate the watcher
     pingTick(true, options, callback);
     isWatcherEnabled = true;
     setTimeout(function () {
@@ -44,7 +41,7 @@ function printHelp() {
     c("-t, --timeout\t\tping timeout in seconds. default: 2");
     process.exit();
 }
-if (args['_']) {
+if (args['_'] && args['_'].length > 0) {
     var options = {
         interval: args['i'] || args['interval'] || 10,
         port: args['p'] || args['port'] || 80,
@@ -62,12 +59,15 @@ if (args['_']) {
     }, options.interval * 1000);
 }
 function pingTick(isModule, options, callback) {
+    console.log(options);
     var timestamp = new Date().toTimeString().slice(0, 8);
     var pingPromise = ping(options.url, options.port).timeout(options.timeout * 1000);
     if (isModule) {
         pingPromise.then(function (time) {
             callback(time);
-        }).catch(callback(-1));
+        }).catch(function () {
+            callback(-1);
+        });
         if (isWatcherEnabled)
             setTimeout(function () {
                 pingTick(true, options, callback);
@@ -88,20 +88,18 @@ function isValidInterval(value) {
     return (!isNaN(value) && value > 0);
 }
 function isValidParameters(options) {
-    // Port number must be a number and valid (1-65535)
     if (!isValidPort(options.port)) {
         console.log("Invalid port number supplied. Must be in range 1 - 65535.");
         return false;
     }
-    // Interval must be a number and above 0.
     if (!isValidInterval(options.interval)) {
         console.log("Ping interval is invalid. Must be above zero (0).");
         return false;
     }
-    // Timeout must be a number and above 0.
     if (!isValidTimeout(options.timeout)) {
         console.log("Ping timeout is invalid. Must be above zero (0).");
         return false;
     }
     return true;
 }
+//# sourceMappingURL=index.js.map
