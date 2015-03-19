@@ -1,0 +1,6 @@
+tsd.json
+*.map
+*.*~
+*.swp
+node_modules/
+NUL
