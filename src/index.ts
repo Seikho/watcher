@@ -9,7 +9,7 @@ function printHelp() {
     var c = console.log;
     c("Webserver watcher");
     c("");
-    c("Usage: node src/index <url> [-p portNumber] [-i intervalSeconds]");
+    c("Usage: node src/index <url> [-p portNumber] [-i intervalSeconds] [-t timeoutSeconds]");
     c("");
     c("Options:");
     c("<url>\t\t\tdestination url. [required]");
@@ -54,6 +54,6 @@ setInterval(pingTick, interval*1000);
 function pingTick() {
     ping(url, port).timeout(timeout*1000)
         .then(time => {
-            console.log("%s: %dms", url, time);
-        }).catch(() => console.log("%s: Timed out after %dseconds", timeout));
+            console.log("[%s:%d] %dms", url, port, time);
+        }).catch(() => console.log("[%s:%d] Timed out after %dseconds", url, port, timeout));
 }
