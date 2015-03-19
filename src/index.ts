@@ -58,26 +58,25 @@ if (args['_']) {
         timeout: args['t'] || args['timeout'] || 2,
         url: args['_'][0]
     }
-    
+
     if (!isValidParameters(options)) {
         console.log("watcher: Invalid parameters supplied.");
         printHelp();
     }
 
     console.log("Press CTRL+C to exit");
-
+    pingTick(false, options);
     setInterval(() => { pingTick(false, options); }, options.interval*1000);
 }
 
 function pingTick(isModule: boolean, options?: WatchOptions, callback?: (arg) => any) {
     var timestamp = new Date().toTimeString().slice(0,8);
-    var pingPromise = ping(options.url, options.port);
+    var pingPromise = ping(options.url, options.port).timeout(options.timeout*1000);
 
     if (isModule) {
-        pingPromise.tim
-            pingPromise.then(time => {
-                callback(time);
-            }).catch(callback(-1));
+        pingPromise.then(time => {
+            callback(time);
+        }).catch(callback(-1));
         if (isWatcherEnabled) setTimeout(() => { pingTick(true, options, callback) }, options.interval*1000);
         return;
     }
@@ -116,5 +115,6 @@ function isValidParameters(options: WatchOptions) {
         console.log("Ping timeout is invalid. Must be above zero (0).");
         return false; 
     }
+    return true;
 }
 
