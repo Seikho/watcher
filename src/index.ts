@@ -35,6 +35,7 @@ export interface WatchOptions {
     port?: number;
     interval?: number;
     timeout?: number;
+    silent?: boolean;
 }
 
 function printHelp() {
@@ -48,6 +49,7 @@ function printHelp() {
     c("-p, --port\t\tport number. default: 80");
     c("-i, --interval\t\theartbeat interval in seconds. default: 10");
     c("-t, --timeout\t\tping timeout in seconds. default: 2");
+    c("-s, --silent\t\trun silently.");
     process.exit();
 }
 
@@ -56,7 +58,8 @@ if (args['_'] && args['_'].length > 0) {
         interval: args['i'] || args['interval'] || 10,
         port: args['p'] || args['port'] || 80,
         timeout: args['t'] || args['timeout'] || 2,
-        url: args['_'][0]
+        url: args['_'][0],
+        silent: !!args['s'] || !!args['silent'] || false
     }
 
     if (!isValidParameters(options)) {
@@ -70,7 +73,6 @@ if (args['_'] && args['_'].length > 0) {
 }
 
 function pingTick(isModule: boolean, options?: WatchOptions, callback?: (arg) => any) {
-    console.log(options);
     var timestamp = new Date().toTimeString().slice(0,8);
     var pingPromise = ping(options.url, options.port).timeout(options.timeout*1000);
 
@@ -84,7 +86,7 @@ function pingTick(isModule: boolean, options?: WatchOptions, callback?: (arg) =>
         return;
     }
     pingPromise.then(time => {
-        console.log("[%s] [%s:%d] %dms", timestamp, options.url, options.port, time);
+        if (!options.silent) console.log("[%s] [%s:%d] %dms", timestamp, options.url, options.port, time);
     }).catch(() => console.log("[%s:%d] Timed out after %dseconds", options.url, options.port, options.timeout));
 }
 

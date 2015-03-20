@@ -37,6 +37,7 @@
     // -p, --port: port number. default: 80  
     // -i, --interval: interval in seconds. default: 10  
     // -t, --timeout: timeout in seconds. default 2
+    // -s, --silent: run silenty, do not produce console output.
 
 ## license
 
