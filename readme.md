@@ -15,11 +15,11 @@
 	npm install
 
 ## usage
-**use it as a node module**
+**use it as a node module** (Note: all times are in seconds)
 
     npm install webwatcher
     var watcher = require("webwatcher");
-    var options = { url: 'google.com' };
+    var options = { url: 'google.com', timeout: 2, interval: 5, port: 80 };
     var callback = function(time) { console.log("Response time: %d", time); }
     watcher.start(options, callback);
 	...
