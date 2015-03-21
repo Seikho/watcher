@@ -21,9 +21,9 @@
     var watcher = require("webwatcher");
     var options = { url: 'google.com', timeout: 2, interval: 5, port: 80 };
     var callback = function(time) { console.log("Response time: %d", time); }
-    watcher.start(options, callback);
-	...
-	watcher.stop();
+    var w = watcher.start(options, callback);
+	// ...
+	w.stop();
 
    
 
