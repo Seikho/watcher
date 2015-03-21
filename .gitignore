@@ -5,3 +5,4 @@ tsd.json
 node_modules/
 NUL
 .tscache/
+*.log
