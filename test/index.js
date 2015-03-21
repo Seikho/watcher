@@ -8,10 +8,10 @@ describe("node module tests", function () {
         };
         var callback = function (time) {
             expect(time > 0).to.equal(true);
-            watcher.stop();
+            w.stop();
             done();
         };
-        watcher.start(options, callback);
+        var w = watcher.start(options, callback);
     });
 });
 //# sourceMappingURL=index.js.map

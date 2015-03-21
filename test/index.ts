@@ -10,9 +10,9 @@ describe("node module tests", () => {
         };
         var callback = (time) => {
             expect(time > 0).to.equal(true);
-            watcher.stop();
+			w.stop();
             done();
         };
-        watcher.start(options, callback);
+        var w = watcher.start(options, callback);
     });
 });

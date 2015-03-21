@@ -1,10 +1,8 @@
-/// <reference path="typings/tsd.d.ts" />
 var minimist = require("minimist");
 var ping = require("node-http-ping");
 var args = minimist(process.argv.slice(2));
 if (args['help'] || args['h'])
     printHelp();
-//TODO Convert to class to create multiple watcher instances
 function start(options, callback) {
     var options = {
         url: options.url,
@@ -18,7 +16,6 @@ function start(options, callback) {
         throw "InvalidInputExpception: Invalid parameter supplied";
     if (!callback)
         throw "InvalidInputException: Callback not supplied";
-    // Initiate the watcher
     var watcher = new Watcher(options, true, callback);
     watcher.start();
     return watcher;
@@ -110,17 +107,14 @@ function isValidInterval(value) {
     return (!isNaN(value) && value > 0);
 }
 function isValidParameters(options) {
-    // Port number must be a number and valid (1-65535)
     if (!isValidPort(options.port)) {
         console.log("Invalid port number supplied. Must be in range 1 - 65535.");
         return false;
     }
-    // Interval must be a number and above 0.
     if (!isValidInterval(options.interval)) {
         console.log("Ping interval is invalid. Must be above zero (0).");
         return false;
     }
-    // Timeout must be a number and above 0.
     if (!isValidTimeout(options.timeout)) {
         console.log("Ping timeout is invalid. Must be above zero (0).");
         return false;
