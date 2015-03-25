@@ -33,7 +33,7 @@ Note: all times are in seconds
     var w1 = watcher.start(options, callback);
 	var w2 = watcher.start(options, callback2);
 	...
-	w.stop();
+	w1.stop();
 	w2.stop();
    
 
