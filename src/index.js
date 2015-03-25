@@ -62,7 +62,10 @@ var Watcher = (function () {
         this.queueTick();
     };
     Watcher.prototype.queueTick = function () {
-        setTimeout(this.pingTick, this.interval * 1000);
+        var _this = this;
+        setTimeout(function () {
+            _this.pingTick();
+        }, this.interval * 1000);
     };
     return Watcher;
 })();
@@ -70,7 +73,7 @@ function printHelp() {
     var c = console.log;
     c("Webserver watcher");
     c("");
-    c("Usage: node src/index <url> [-p portNumber] [-i intervalSeconds] [-t timeoutSeconds]");
+    c("Usage: node src/index <url> [-p portNumber] [-i intervalSeconds] [-t timeoutSeconds] [-s]");
     c("");
     c("Options:");
     c("<url>\t\t\tdestination url. [required]");
@@ -92,7 +95,7 @@ if (args['_'] && args['_'].length > 0) {
         console.log("watcher: Invalid parameters supplied.");
         printHelp();
     }
-    console.log("Watcher v0.2.0");
+    console.log("Webserver Watcher");
     console.log("Press CTRL+C to exit");
     var watcher = new Watcher(options, false, null);
     watcher.start();
