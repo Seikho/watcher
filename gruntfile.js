@@ -17,10 +17,10 @@ module.exports = function(grunt) {
                 },
                 watch: "src/**/*.ts"
             }
-        },
-
+        }
     });
     grunt.loadNpmTasks("grunt-ts");
-    grunt.registerTask("default", ["ts"]);
+    grunt.registerTask("default", ["ts:default"]);
     grunt.registerTask("watch", ["ts:watch"]);
 };
+
