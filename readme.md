@@ -1,6 +1,9 @@
 ## watcher
 ###### a simple web server watcher
 
+[![NPM version](http://img.shields.io/npm/v/webwatcher.svg?style=flat)](https://www.npmjs.org/package/webwatcher)
+[![Travis build status](http://img.shields.io/travis/Seikho/watcher/master.svg?style=flat)](https://travis-ci.org/Seikho/watcher)
+
 ## requirements
 * node.js
 * npm
