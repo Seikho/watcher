@@ -101,14 +101,17 @@ if (args['_'] && args['_'].length > 0) {
     watcher.start();
 }
 function isValidPort(value) {
-    return (!isNaN(value) && value > 0 || value <= 65535);
+    return (!isNaN(value) && Math.floor(value) === value && value > 0 && value <= 65535);
 }
+exports.isValidPort = isValidPort;
 function isValidTimeout(value) {
     return (!isNaN(value) && value > 0);
 }
+exports.isValidTimeout = isValidTimeout;
 function isValidInterval(value) {
     return (!isNaN(value) && value > 0);
 }
+exports.isValidInterval = isValidInterval;
 function isValidParameters(options) {
     if (!isValidPort(options.port)) {
         console.log("Invalid port number supplied. Must be in range 1 - 65535.");
@@ -124,4 +127,5 @@ function isValidParameters(options) {
     }
     return true;
 }
+exports.isValidParameters = isValidParameters;
 //# sourceMappingURL=index.js.map

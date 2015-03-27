@@ -124,19 +124,19 @@ if (args['_'] && args['_'].length > 0) {
 	watcher.start();
 }
 
-function isValidPort(value: number) {
-	return (!isNaN(value) && value > 0 || value <= 65535);
+export function isValidPort(value: number) {
+    return (!isNaN(value) && Math.floor(value) === value && value > 0 && value <= 65535);
 }
 
-function isValidTimeout(value: number) {
+export function isValidTimeout(value: number) {
 	return (!isNaN(value) && value > 0);
 }
 
-function isValidInterval(value: number) {
+export function isValidInterval(value: number) {
 	return (!isNaN(value) && value > 0);
 }
 
-function isValidParameters(options: WatchOptions) {
+export function isValidParameters(options: WatchOptions) {
 	// Port number must be a number and valid (1-65535)
 	if (!isValidPort(options.port)) {
 		console.log("Invalid port number supplied. Must be in range 1 - 65535.");
