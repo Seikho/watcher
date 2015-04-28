@@ -22,26 +22,26 @@
 	npm install -g webwatcher
 
 ## usage
-### node module 
+### node module
 Note: all times are in seconds
 
     npm install webwatcher
     var watcher = require("webwatcher");
-    var options = { url: 'google.com', timeout: 2, interval: 5, port: 80 };
-	var options2 = { url: 'bing.com', timeout: 2, interval: 5, port: 80 };
+    var googleOptions = { url: 'google.com', timeout: 2, interval: 5, port: 80 };
+	var bingOptions = { url: 'bing.com', timeout: 2, interval: 5, port: 80 };
 
-    var callback = function(time) { console.log("Google: Response time: %d", time); }
-	var callback2 = function(time) { console.log("Bing: Response time: %d", time); }
+    var googleCb = function(time) { console.log("Google: Response time: %d", time); }
+	var bingCb = function(time) { console.log("Bing: Response time: %d", time); }
 
-    var w1 = watcher.start(options, callback);
-	var w2 = watcher.start(options, callback2);
+    var w1 = watcher.start(googleOptions, googleCb);
+	var w2 = watcher.start(bingOptions, bingCb);
 	...
 	w1.stop();
 	w2.stop();
-   
+
 
 ### Local command line
-	
+
     cd watcher
     node src/index www.google.com -t 2 -i 5
 
@@ -49,7 +49,7 @@ Note: all times are in seconds
 
 	[from anywhere...]
 	webwatcher google.com -p 80 -t 2 -i 10
-    
+
     // node src/index [url] [-p portNumber] [-t timeoutSeconds] [-i intervalSeconds]
     // url: destination url. E.g. www.google.com  
     // -p, --port: port number. default: 80  
