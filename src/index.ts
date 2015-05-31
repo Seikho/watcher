@@ -9,7 +9,6 @@ export function start(options: WatchOptions, callback: (time) => any): Watcher {
 	}
 	if (!options.url) throw "InvalidInputException: Url not supplied";
 	if (!isValidParameters(options)) throw "InvalidInputExpception: Invalid parameter supplied";
-	if (!callback) throw "InvalidInputException: Callback not supplied";
 
 	// Initiate the watcher
 	var watcher = new Watcher(options, callback);
