@@ -36,7 +36,6 @@ class Watcher {
 	}
 
 	isEnabled: boolean;
-	isModule: boolean;
 	interval: number;
 	timeout: number;
 	url: string;
