@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var watcher = require("../index");
+var watcher = require("../src/index.js");
 var minimist = require("minimist");
 
 var args = minimist(process.argv.slice(2));
@@ -27,7 +27,6 @@ if (args['_'] && args['_'].length > 0) {
 	console.log("Webserver Watcher");
 	console.log("Press CTRL+C to exit");
 	var watcher = watcher.start(options, null);
-	watcher.start();
 }
 else printHelp();
 
