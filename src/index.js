@@ -1,9 +1,4 @@
-var minimist = require("minimist");
 var ping = require("node-http-ping");
-var args = minimist(process.argv.slice(2));
-if (args['help'] || args['h'])
-    printHelp();
-//TODO Convert to class to create multiple watcher instances
 function start(options, callback) {
     var options = {
         url: options.url,
@@ -18,14 +13,13 @@ function start(options, callback) {
     if (!callback)
         throw "InvalidInputException: Callback not supplied";
     // Initiate the watcher
-    var watcher = new Watcher(options, true, callback);
+    var watcher = new Watcher(options, callback);
     watcher.start();
     return watcher;
 }
 exports.start = start;
 var Watcher = (function () {
-    function Watcher(options, isModule, callback) {
-        this.isModule = isModule;
+    function Watcher(options, callback) {
         this.interval = options.interval;
         this.port = options.port;
         this.url = options.url;
@@ -45,7 +39,8 @@ var Watcher = (function () {
         var _this = this;
         var timestamp = new Date().toTimeString().slice(0, 8);
         var pingPromise = ping(this.url, this.port).timeout(this.timeout * 1000);
-        if (this.isModule) {
+        // If this is consumed as a node module, execute the callback provided instead of considering stdout
+        if (this.callback !== null) {
             pingPromise.then(function (time) {
                 _this.callback(time);
             }).catch(function () {
@@ -54,12 +49,13 @@ var Watcher = (function () {
             this.queueTick();
             return;
         }
+        // There is no callback, we consider printing the result to console
         pingPromise.then(function (time) {
             if (!_this.silent)
-                console.log("[%s] [%s:%d] %dms", timestamp, options.url, options.port, time);
+                console.log("[%s] [%s:%d] %dms", timestamp, _this.url, _this.port, time);
         }).catch(function () {
             if (!_this.silent)
-                console.log("[%s:%d] Timed out after %dseconds", options.url, options.port, options.timeout);
+                console.log("[%s:%d] Timed out after %d second(s)", _this.url, _this.port, _this.timeout);
         });
         this.queueTick();
     };
@@ -69,37 +65,6 @@ var Watcher = (function () {
     };
     return Watcher;
 })();
-function printHelp() {
-    var c = console.log;
-    c("Webserver watcher");
-    c("");
-    c("Usage: node src/index <url> [-p portNumber] [-i intervalSeconds] [-t timeoutSeconds] [-s]");
-    c("");
-    c("Options:");
-    c("<url>\t\t\tdestination url. [required]");
-    c("-p, --port\t\tport number. default: 80");
-    c("-i, --interval\t\theartbeat interval in seconds. default: 10");
-    c("-t, --timeout\t\tping timeout in seconds. default: 2");
-    c("-s, --silent\t\trun silently.");
-    process.exit();
-}
-if (args['_'] && args['_'].length > 0) {
-    var options = {
-        interval: args['i'] || args['interval'] || 10,
-        port: args['p'] || args['port'] || 80,
-        timeout: args['t'] || args['timeout'] || 2,
-        url: args['_'][0],
-        silent: !!args['s'] || !!args['silent'] || false
-    };
-    if (!isValidParameters(options)) {
-        console.log("watcher: Invalid parameters supplied.");
-        printHelp();
-    }
-    console.log("Webserver Watcher");
-    console.log("Press CTRL+C to exit");
-    var watcher = new Watcher(options, false, null);
-    watcher.start();
-}
 function isValidPort(value) {
     return (!isNaN(value) && Math.floor(value) === value && value > 0 && value <= 65535);
 }
