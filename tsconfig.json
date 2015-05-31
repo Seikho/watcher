@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "sourceMap": false
+    },
+    "filesGlob": [
+        "./src/**/*.ts",
+        "./test/**/*.ts"
+    ],
+    "files": [
+        "./test/index.ts",
+        "./src/index.ts",
+        "./src/typings/bluebird/bluebird.d.ts",
+        "./src/typings/chai/chai.d.ts",
+        "./src/typings/minimist/minimist.d.ts",
+        "./src/typings/mocha/mocha.d.ts",
+        "./src/typings/node/node.d.ts",
+        "./src/typings/tsd.d.ts"
+    ]
+}

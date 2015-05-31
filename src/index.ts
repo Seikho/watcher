@@ -1,4 +1,3 @@
-/// <reference path="typings/tsd.d.ts" />
 import minimist = require("minimist");
 var ping = require("node-http-ping");
 
