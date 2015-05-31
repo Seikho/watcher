@@ -13,6 +13,16 @@ describe("node module tests", function () {
         };
         var w = watcher.start(options, callback);
     });
+    it("will watch google.com with no callback provided (CLI simulation)", function (done) {
+        var options = {
+            url: 'google.com'
+        };
+        var w = watcher.start(options, null);
+        setTimeout(function () {
+            w.stop();
+            done();
+        }, 500);
+    });
 });
 describe("port validation tests", function () {
     inputTest("will invalidate a negative port number", watcher.isValidPort(-1), false);
