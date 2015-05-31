@@ -14,20 +14,7 @@ describe("node module tests", () => {
             done();
         };
         var w = watcher.start(options, callback);
-    });
-
-    it("will watch google.com with no callback provided (CLI simulation)", done => {
-        var options = {
-            url: 'google.com'
-        };
-        var w = watcher.start(options, null);
-        
-        setTimeout(() => {
-           w.stop();
-           done(); 
-        }, 500);
-    });
-    
+    });   
 });
 
 describe("port validation tests", () => {
