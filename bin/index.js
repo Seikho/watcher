@@ -43,4 +43,4 @@ function printHelp() {
 	c("-t, --timeout\t\tping timeout in seconds. default: 2");
 	c("-s, --silent\t\trun silently.");
 	process.exit();
-} 
+}
