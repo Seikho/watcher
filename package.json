@@ -1,6 +1,6 @@
 {
   "name": "webwatcher",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "A simple webserver watcher",
   "main": "src/index.js",
   "scripts": {
@@ -35,7 +35,7 @@
     "chai": "^2.1.2",
     "mocha": "^2.2.1"
   },
-  "preferGlobal": "true",
+  "preferGlobal": true,
   "bin": {
 	  "webwatcher": "bin/index.js"
   }
